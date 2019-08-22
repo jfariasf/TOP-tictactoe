@@ -1,0 +1,28 @@
+body{
+    text-align: center;
+}
+
+.container{
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+.board_slot{
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+}
+.board_main_border{
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+.board_right_border{
+    border-right: 1px solid #000;
+}
+.board_bottom_border{
+    border-bottom: 1px solid #000;
+}
