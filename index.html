@@ -8,15 +8,39 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h2>Welcome to the Tic Tac Toe game</h2>
-
-    </header>
+    <nav id="navbar">
+        <div id="top_title">Tic Tac Toe</div>
+        <div class="navbar_elements">
+            <a class="navbar_button" href="javascript:togglePopup()">Play again</a>
+        </div>
+    </nav>
+    <div class="winner_text"></div>
     <div class="container">
-
-
     </div>
 
+    <div class="form_container"> 
+
+        <form id="form" name="add_book" action="#" onsubmit="return startGame()">
+            <h2 id="form_toptitle">Welcome to the Tic Tac Toe Game!</h3>
+            <br>
+            <label for="form_size" class="form_elements">Size of the board</label>
+            <br>
+            <input id="form_size" class="form_elements" type="number" 
+                    maxlength="30" value="3" min="3" max="30" required>
+            <br>
+            <label for="form_boxsel" class="form_elements">Choose </label>
+            <div id="form_boxsel" class="form_boxes form_elements">
+                <div class="xBox" onclick="setSelection(0)">
+                    <span id="x">X</span>
+                  </div>
+                <div class="oBox" onclick="setSelection(1)">
+                    <span id="o">O</span>
+                </div>
+            </div>
+            <button id="submit_btn" class="form_elements start_button" type="submit">Start!</button>
+        </form>
+    </div>
+    <div id="bg_overlay" class="overlay" ></div>
 <script src="./script.js"></script>
 </body>
 </html>
