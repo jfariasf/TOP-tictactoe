@@ -42,12 +42,14 @@ input[type=number], input[type=text]{
 }
 .selected {
     transform:scale(1.2);
+    -webkit-transform:scale(1.2);
     /*transition:transform 0.5s linear; */
 }
 
 .nonselected:hover
 {
   transform:scale(1.2);
+  -webkit-transform:scale(1.2);
   /*transform:translate(+25%, +25%) scale(1);*/
  
 }
