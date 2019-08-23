@@ -3,11 +3,11 @@ const game = () => {
     const COMPUTER = -1;
     const TIE = 0;
     const options = ["X","O"]
+    let popup_flag = true;
     
     /*
         Player class
-        has a selection of cross or circle
-        contains and increases score
+        
     */
     const Player = (selection, type) =>{
 
@@ -29,6 +29,7 @@ const game = () => {
         const MAX_TURNS = dimension * dimension;
         let turns = 0;
         let board_array = [];
+        let game_ended = false;
 
         /*
             DisplayController
@@ -44,9 +45,7 @@ const game = () => {
             
 
             const clickHandler = (event) =>{
-
                 BoardController.processTurn(event.target.id);
-                
             };
 
             const createSlot = (posA, posB) => {
@@ -55,6 +54,7 @@ const game = () => {
                 newSlot.id = "slot_"+posA+"_"+posB;
                 newSlot.innerHTML = "&nbsp;";
                 newSlot.classList.add(SLOT_CLASS);
+
                 newSlot.addEventListener("click", clickHandler);
                 container.appendChild(newSlot);
                 return newSlot;
@@ -85,16 +85,31 @@ const game = () => {
                 let newP = document.createElement("p");
                 newP.classList.add("board_slot_text");
                 newP.innerHTML = mark;
-                
-                
-                //newP.createTextNode = mark;
-                
                 slot.appendChild(newP);
-               // slot.innerHTML = mark;
                 slot.removeEventListener("click", clickHandler);
             };
+
+            const togglePopup = () => {
+                if(popup_flag){
+                    document.querySelector(".form_container").classList.add("form_container_hidden");
+                    document.querySelector("#bg_overlay").classList.remove("overlay");
+                    popup_flag = false;
+                }
+                else{
+                    document.querySelector(".form_container").classList.remove("form_container_hidden");
+                    document.querySelector("#bg_overlay").classList.add("overlay");
+                    document.querySelector(".container").innerHTML = "";
+                    document.querySelector(".winner_text").innerHTML = "";
+                    game
+                    popup_flag = true;
+                }
+            };
+
+            const setWinnerTitle = (winner) => {
+                document.querySelector(".winner_text").innerHTML="The winner is: "+winner+"!";
+            };
             
-            return {createSlot, addSlotClasses, createNewLine, addCSSStyle, addChoice};
+            return {createSlot, addSlotClasses, createNewLine, addCSSStyle, addChoice, togglePopup, setWinnerTitle};
         })();
 
         /* 
@@ -147,6 +162,9 @@ const game = () => {
             };
 
             const processTurn = (choice) => {
+                if(game_ended == true){
+                    return;
+                }
                 let pos = choice.split("_");
                 let playerTurn = processPlayerSelection(human, {posY: pos[1], posX: pos[2]});
                 let computerTurn = processPlayerSelection(computer, getComputerChoice());
@@ -165,8 +183,8 @@ const game = () => {
             };
 
             const endGame = (winner) => {
-                document.querySelector(".winner_text").innerHTML="The winner is: "+winner+"!";
-                
+                DisplayController.setWinnerTitle(winner);
+                game_ended = true;
 
             };
 
@@ -214,57 +232,41 @@ const game = () => {
         gameboard.BoardController.buildBoard();
         if (player.getSelection()=="O")
             gameboard.BoardController.initComputerTurn();
+        gameboard.DisplayController.togglePopup();
     };
-    return {start};
+
+    const restart = () => {
+        gameboard.DisplayController.togglePopup();
+    }
+    return {start, restart};
 };
 
 
-
 let selection = 0;
-let popup_flag = true;
-
-const togglePopup = (() =>{
-    if(popup_flag){
-        document.querySelector(".form_container").classList.add("form_container_hidden");
-        document.querySelector("#bg_overlay").classList.remove("overlay");
-        popup_flag = false;
-    }
-    else{
-        document.querySelector(".form_container").classList.remove("form_container_hidden");
-        document.querySelector("#bg_overlay").classList.add("overlay");
-        document.querySelector(".container").innerHTML = "";
-        document.querySelector(".winner_text").innerHTML = "";
-        popup_flag = true;
-    }
-})
+let newgame;
 
 
 const setSelection = (choice) =>{
     selection = choice;
+    let xBox = document.querySelector(".xBox");
+    let oBox = document.querySelector(".oBox");
+    if (choice == 0){
+        xBox.classList.add("selected");
+        oBox.classList.remove("selected");
+    }
+    else{
+        oBox.classList.add("selected");
+        xBox.classList.remove("selected");
+    }
     
 }
 
 const startGame = () =>{
     let boardSize = document.querySelector("#form_size").value;
-
-    togglePopup();
-    
-    const newgame = game();
+    newgame = game();
     newgame.start(selection, boardSize);
 }
 
-
-
-//newgame.start();
-
-
-
-
-/*
-            if (Math.abs(j-i) == dimension - 1 || i+j == 0 || (j-i == 0 && (j == dimension-1 || i == dimension-1)))
-                    new_div.innerHTML = "corner";
-            else if (j == Math.floor( dimension/2) && i == Math.floor(dimension/2))
-                new_div.innerHTML = "center";
-            else
-                new_div.innerHTML = "not";
-*/
+const restartGame = () => {
+    newgame.restart();
+}

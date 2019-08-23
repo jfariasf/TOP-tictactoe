@@ -11,7 +11,7 @@
     <nav id="navbar">
         <div id="top_title">Tic Tac Toe</div>
         <div class="navbar_elements">
-            <a class="navbar_button" href="javascript:togglePopup()">Play again</a>
+            <a class="navbar_button" href="javascript:restartGame()">Play again</a>
         </div>
     </nav>
     <div class="winner_text"></div>
@@ -30,10 +30,10 @@
             <br>
             <label for="form_boxsel" class="form_elements">Choose </label>
             <div id="form_boxsel" class="form_boxes form_elements">
-                <div class="xBox" onclick="setSelection(0)">
+                <div class="xBox nonselected" onclick="setSelection(0)" >
                     <span id="x">X</span>
                   </div>
-                <div class="oBox" onclick="setSelection(1)">
+                <div class="oBox nonselected" onclick="setSelection(1)">
                     <span id="o">O</span>
                 </div>
             </div>
