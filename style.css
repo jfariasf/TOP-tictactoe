@@ -128,8 +128,8 @@ input[type=number], input[type=text]{
     z-index:99999;
     position: fixed;
     left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    
+    transform: translateX(-50%);
 }
 .form_container_hidden{
     opacity: 0;
