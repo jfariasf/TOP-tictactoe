@@ -6,20 +6,21 @@ const game = () => {
     let popup_flag = true;
     
     /*
-        Player class
+        Player object
         
     */
-    const Player = (selection, type) =>{
+    const Player = (name, selection, type) =>{
 
         let winner = false;
 
+        const getName = () => name;
         const getSelection = () => selection;
         const getType = () => type;
         const setWinner = () => {
             winner = true;
         };
         const getWinner = () => winner;
-        return {getSelection, getType, setWinner, getWinner};
+        return {getName, getSelection, getType, setWinner, getWinner};
     };
 /* 
     GameBoard
@@ -113,6 +114,7 @@ const game = () => {
         })();
 
         /* 
+            BoardController
             Controls the logic of the board
         */
         const BoardController = (()=> {
@@ -171,10 +173,10 @@ const game = () => {
                 checkForWinners(human, computer);
 
                 if(human.getWinner()){
-                    endGame("You");
+                    endGame(human.getName());
                 }
                 else if(computer.getWinner()){
-                    endGame("The computer");
+                    endGame(computer.getName());
                 }
                 else{
                     if(!playerTurn || !computerTurn )
@@ -244,29 +246,40 @@ const game = () => {
 
 let selection = 0;
 let newgame;
+let toggleFlag = true;
+let computerFlag = true;
 
-
-const setSelection = (choice) =>{
-    selection = choice;
-    let xBox = document.querySelector(".xBox");
-    let oBox = document.querySelector(".oBox");
-    if (choice == 0){
-        xBox.classList.add("selected");
-        oBox.classList.remove("selected");
+const toggleSelection = () => {
+    if (toggleFlag){
+        document.querySelector("#player1xBox").classList.remove("selected");
+        document.querySelector("#player1oBox").classList.add("selected");
+        document.querySelector("#player2oBox").classList.remove("selected");
+        document.querySelector("#player2xBox").classList.add("selected");
+        toggleFlag = false;
     }
     else{
-        oBox.classList.add("selected");
-        xBox.classList.remove("selected");
+        document.querySelector("#player1xBox").classList.add("selected");
+        document.querySelector("#player1oBox").classList.remove("selected");
+        document.querySelector("#player2oBox").classList.add("selected");
+        document.querySelector("#player2xBox").classList.remove("selected");
+        toggleFlag = true;
     }
-    
 }
+
+const setSelection = (choice, player) =>{
+    selection = (player == 1) ? choice : 1 - choice;
+    if (selection == 1 && toggleFlag)
+        toggleSelection();
+    else if(selection == 0 && !toggleFlag)
+        toggleSelection();
+};
 
 const startGame = () =>{
     let boardSize = document.querySelector("#form_size").value;
     newgame = game();
     newgame.start(selection, boardSize);
-}
+};
 
 const restartGame = () => {
     newgame.restart();
-}
+};
