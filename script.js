@@ -133,7 +133,7 @@ const game = () => {
                     return getComputerChoice();
             };
 
-            const processScore = (score, human, computer) => {
+            const processScore = (score) => {
                 if (score == dimension){
                     human.setWinner();
                     return true;
@@ -145,7 +145,7 @@ const game = () => {
                 return false;
             };
 
-            const checkForWinners = (human, computer) => {
+            const checkForWinners = () => {
                 let diagonal = new Array(2).fill(0);
                 let horizontal = 0;
                 let vertical = 0;
@@ -158,12 +158,12 @@ const game = () => {
                         vertical += board_array[y][i];
                     }
                     diagonal[0] += board_array[i][i];
-                    diagonal[1] += board_array[i][(dimension-1)-i];
-                    if (processScore(horizontal, human, computer) || processScore(vertical, human, computer))
+                    diagonal[1] += board_array[i][(dimension - 1) - i];
+                    if (processScore(horizontal) || processScore(vertical))
                         return;
                 }
-                processScore(diagonal[0], human, computer);
-                processScore(diagonal[1], human, computer);
+                processScore(diagonal[0]);
+                processScore(diagonal[1]);
             };
 
             const processTurn = (choice) => {
@@ -190,7 +190,7 @@ const game = () => {
                         player_flag = false;
                     }
                 }
-                checkForWinners(human, computer);
+                checkForWinners();
 
                 if(human.getWinner()){
                     endGame(human.getName());
@@ -258,9 +258,8 @@ const game = () => {
 
         gameboard = Gameboard(player, computer, boardSize);
         gameboard.BoardController.buildBoard();
-        if(opponentType == "computer"){
+        if(opponentType == "computer")
             computer_flag = true;
-        }
         if (player.getSelection()==options[1]){
             if(computer_flag == true)
                 gameboard.BoardController.initComputerTurn();
