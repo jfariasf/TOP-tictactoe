@@ -20,7 +20,7 @@
 
     <div class="form_container"> 
 
-        <form id="form" name="add_book" action="#" onsubmit="return startGame()">
+        <form id="form" name="start_game" onsubmit="return startGame();">
             <div class="form_title">
                 <h2 id="form_toptitle">Welcome to the Tic Tac Toe Game!</h3>
                 <br>
@@ -28,7 +28,7 @@
             <div class="form_left">
                 <h3>Player 1</h3>
                 
-                <input type="text" class="form_elements" placeholder="Player 1 name">
+                <input type="text" class="form_elements" id="player1_name" placeholder="Player 1 name" required>
                 <div id="form_boxsel" class="form_boxes form_elements">
                         <div id="player1xBox" class="xBox boxOptions selected" onclick="setSelection(0,1)" >
                             <span class="x">X</span>
@@ -41,7 +41,7 @@
             <div class="form_right">
                 <h3>Player 2</h3>
                 
-                <input type="text" class="form_elements" placeholder="Player 2 name">
+                <input type="text" class="form_elements" id="player2_name" placeholder="Player 2 name" required>
                 <div id="form_boxsel" class="form_boxes form_elements">
                         <div id="player2xBox" class="xBox boxOptions" onclick="setSelection(0,2)" >
                             <span class="x">X</span>
@@ -51,8 +51,8 @@
                         </div>
                     </div>
                 <div class="player_type_selector">
-                    <input type="radio" class="form_elements" name="player_type" id="player_type"> Human
-                    <input type="radio" class="form_elements" name="player_type" id="player_type"> Computer
+                    <input type="radio" class="form_elements" name="player_type" value="human"> Human
+                    <input type="radio" class="form_elements" name="player_type" value="computer" checked> Computer
                 </div>
 
             </div>

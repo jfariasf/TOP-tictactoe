@@ -4,6 +4,9 @@ const game = () => {
     const TIE = 0;
     const options = ["X","O"]
     let popup_flag = true;
+    let gameboard;
+    let player_flag = false;
+    let computer_flag = false;  
     
     /*
         Player object
@@ -131,11 +134,11 @@ const game = () => {
             };
 
             const processScore = (score, human, computer) => {
-                if (score == dimension || score == dimension){
+                if (score == dimension){
                     human.setWinner();
                     return true;
                 }
-                else if(-score == dimension || -score == dimension){
+                else if(-score == dimension){
                     computer.setWinner();
                     return true;
                 }
@@ -164,12 +167,29 @@ const game = () => {
             };
 
             const processTurn = (choice) => {
+                let playerTurn;
+                let computerTurn;
+
                 if(game_ended == true){
                     return;
                 }
                 let pos = choice.split("_");
-                let playerTurn = processPlayerSelection(human, {posY: pos[1], posX: pos[2]});
-                let computerTurn = processPlayerSelection(computer, getComputerChoice());
+                 if(computer_flag){
+                    playerTurn = processPlayerSelection(human, {posY: pos[1], posX: pos[2]});
+                    computerTurn = processPlayerSelection(computer, getComputerChoice());
+                }
+                else{
+                    if(!player_flag){
+                        playerTurn = processPlayerSelection(human, {posY: pos[1], posX: pos[2]});
+                        computerTurn = true;
+                        player_flag = true;
+                    }
+                    else{
+                        computerTurn = processPlayerSelection(computer, {posY: pos[1], posX: pos[2]});
+                        playerTurn = true;
+                        player_flag = false;
+                    }
+                }
                 checkForWinners(human, computer);
 
                 if(human.getWinner()){
@@ -226,20 +246,31 @@ const game = () => {
         return {DisplayController, BoardController};
     };
 
-    const start = (selection, boardSize) => {
-        let player = Player(options[selection], HUMAN);
-        let computer = Player(options[1-selection], COMPUTER);
+    const start = (selection) => {
+        let opponentType = document.querySelector('input[name="player_type"]:checked').value;
+        let boardSize = document.querySelector("#form_size").value;
+        let player1_name = document.querySelector("#player1_name").value;
+        let player2_name = document.querySelector("#player2_name").value;
+        let player = Player(player1_name,options[selection], HUMAN);
+        let computer = Player(player2_name,options[1-selection], COMPUTER);
 
-        let gameboard = Gameboard(player, computer, boardSize);
+        gameboard = Gameboard(player, computer, boardSize);
         gameboard.BoardController.buildBoard();
-        if (player.getSelection()=="O")
-            gameboard.BoardController.initComputerTurn();
+        if (player.getSelection()==options[1]){
+            if(opponentType == "computer"){
+                computer_flag = true;
+                gameboard.BoardController.initComputerTurn();
+            }
+            else
+                player_flag = true;
+        }
+        
         gameboard.DisplayController.togglePopup();
     };
 
     const restart = () => {
         gameboard.DisplayController.togglePopup();
-    }
+    };
     return {start, restart};
 };
 
@@ -247,7 +278,6 @@ const game = () => {
 let selection = 0;
 let newgame;
 let toggleFlag = true;
-let computerFlag = true;
 
 const toggleSelection = () => {
     if (toggleFlag){
@@ -275,9 +305,9 @@ const setSelection = (choice, player) =>{
 };
 
 const startGame = () =>{
-    let boardSize = document.querySelector("#form_size").value;
     newgame = game();
-    newgame.start(selection, boardSize);
+    newgame.start(selection);
+    return false;
 };
 
 const restartGame = () => {
