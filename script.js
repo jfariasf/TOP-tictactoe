@@ -241,6 +241,8 @@ const game = () => {
             const initComputerTurn = () => {
                 processPlayerSelection(computer, getComputerChoice());
             }
+
+
             return {buildBoard, processTurn, getComputerChoice, initComputerTurn};       
         })();
         return {DisplayController, BoardController};
@@ -256,11 +258,12 @@ const game = () => {
 
         gameboard = Gameboard(player, computer, boardSize);
         gameboard.BoardController.buildBoard();
+        if(opponentType == "computer"){
+            computer_flag = true;
+        }
         if (player.getSelection()==options[1]){
-            if(opponentType == "computer"){
-                computer_flag = true;
+            if(computer_flag == true)
                 gameboard.BoardController.initComputerTurn();
-            }
             else
                 player_flag = true;
         }
